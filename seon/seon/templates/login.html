@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="website icon" type="icon" href="{% static 'images/Logo_Pacos.jpg' %}">
+
+
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box"> 
+            <h1>Iniciar Sesión</h1>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+            </form>
+            
+        </div>
+    </div>
+</body>
+</html>
+

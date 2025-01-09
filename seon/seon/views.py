@@ -1,9 +1,44 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 
 from .models import Tercero
-from .form import TerceroForm
+from .form import LoginForm, TerceroForm, UserRegistrationForm
 
+@user_passes_test(lambda u: u.is_superuser)
+def register_user(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')  # Redirige a una página de éxito o el que prefieras
+    else:
+        form = UserRegistrationForm()
+
+    return render(request, 'register.html', {'form': form})
+
+def login_view(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('menu_rutinas')  # Redirigir al menú de rutinas
+            else:
+                form.add_error(None, 'Credenciales inválidas.')
+    else:
+        form = LoginForm()
+    return render(request, 'login.html', {'form': form})
+
+@login_required
+def menu_rutinas(request):
+    return render(request, 'menu_rutinas.html')
+
+############## REGISTRO DE TERCEROS ###################################################################################
 
 def registro_terceros(request):
     # Manejo de creación de nuevos registros

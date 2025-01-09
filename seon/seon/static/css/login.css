@@ -1,0 +1,97 @@
+/* Estilo global para todo el cuerpo */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+}
+
+/* Contenedor de la caja de login */
+.login-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.1); /* Fondo difuso */
+}
+
+.login-box {
+    background: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-box h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Estilo para los campos del formulario */
+form p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+/* Estilo para el botón de submit */
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo de los mensajes de error */
+form .error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Estilos para los placeholders */
+input::placeholder {
+    color: #aaa;
+}
+
+input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* Estilos responsive */
+@media (max-width: 480px) {
+    .login-box {
+        padding: 20px;
+        max-width: 90%;
+    }
+}

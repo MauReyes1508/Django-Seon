@@ -102,6 +102,9 @@ LOGGING = {
     },
 }
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
+
 
 
 
@@ -124,6 +127,9 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+#AUTH_USER_MODEL = 'seon.Tercero'
+
 
 
 # Internationalization

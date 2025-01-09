@@ -1,6 +1,29 @@
 from django import forms
 from .models import Tercero
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import AuthenticationForm  
+
+class UserRegistrationForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+    confirm_password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password != confirm_password:
+            raise ValidationError("Las contraseñas no coinciden.")
+        return cleaned_data
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(max_length=254, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Usuario'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña'}))
 
 class TerceroForm(forms.ModelForm):
     class Meta:
