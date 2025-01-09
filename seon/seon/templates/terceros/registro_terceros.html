@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Terceros</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="website icon" type="icon" href="{% static 'images/Logo_Pacos.jpg' %}">
+</head>
+<body>
+    <br><br><br><br>
+
+    <form method="POST" action="{% url 'registro_terceros' %}">
+        {% csrf_token %}
+        <div class="container">
+
+            <!-- IDENTIFICACIÓN -->
+            <div class="section-container">
+                <div class="section">
+                    <h1>IDENTIFICACIÓN</h1><br>
+                    <div class="form-group">
+                        <div>
+                            <label>Nombres:</label>
+                            {{ form.nomter }}
+                        </div>
+                        <div>
+                            <label>Apellido 1/Empresa:</label>
+                            {{ form.papter }}
+                        </div>
+                        <div>
+                            <label>Apellido 2:</label>
+                            {{ form.sapter }}
+                        </div>
+                        <div>
+                            <label>Nombre Comercial:</label>
+                            {{ form.nomcter }}
+                        </div>
+                        <div>
+                            <label>Documento/Nit:</label>
+                            {{ form.nitter }}
+                            {% if form.nitter.errors %}
+                                <div class="error">{{ form.nitter.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label>Tipo Documento:</label>
+                            {{ form.tipnit }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IDENTIFICACIÓN - 2 -->
+            <div class="section-container">
+                <div class="section">
+                    <h1>IDENTIFICACIÓN - 2</h1><br>
+                    <div class="form-group">
+                        <div>
+                            <label>Tipo Persona:</label>
+                            {{ form.tipper }}
+                        </div>
+                        <div>
+                            <label>Tipo de Tercero:</label>
+                            {{ form.tipter }}
+                        </div>
+                        <div>
+                            <label>Régimen Simplificado:</label>
+                            {{ form.regimen_sim }}
+                        </div>
+                        <div>
+                            <label>Exento de IVA:</label>
+                            {{ form.excen_iva }}
+                        </div>
+                        <div>
+                            <label>Contacto:</label>
+                            {{ form.contacto }}
+                        </div>
+                        <div>
+                            <label>Cargo:</label>
+                            {{ form.cgo_contac }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UBICACIÓN -->
+            <div class="ubicacion-container section-container">
+                <div class="section">
+                    <h1>UBICACIÓN</h1><br>
+                    <div class="form-group">
+                        <div>
+                            <label>País:</label>
+                            {{ form.paister }}
+                        </div>
+                        <div>
+                            <label>Ciudad:</label>
+                            {{ form.ciuter }}
+                        </div>
+                        <div>
+                            <label>Dirección:</label>
+                            {{ form.dirter }}
+                        </div>
+                        <div>
+                            <label>Teléfonos:</label>
+                            {{ form.telter }}
+                            {% if form.telter.errors %}
+                                <div class="error">{{ form.telter.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label>Móvil:</label>
+                            {{ form.celter }}
+                            {% if form.celter.errors %}
+                                <div class="error">{{ form.celter.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label>Email:</label>
+                            {{ form.direle }}
+                            {% if form.direle.errors %}
+                                <div class="error">{{ form.direle.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OTROS -->
+            <div class="section-container">
+                <div class="section">
+                    <h1>OTROS</h1><br>
+                    <div class="form-group">
+                        <div>
+                            <label>Plazo en Días:</label>
+                            {{ form.plazofac }}
+                        </div>
+                        <div>
+                            <label>Vendedor:</label>
+                            {{ form.vendedor }}
+                        </div>
+                        <div>
+                            <label>Cuenta de Banco:</label>
+                            {{ form.cta_banco }}
+                        </div>
+                        <div>
+                            <label>Código de Banco:</label>
+                            {{ form.cod_banco }}
+                        </div>
+                        <div>
+                            <label>Tipo de Cuenta:</label>
+                            {{ form.tipo_cta }}
+                        </div>
+                        <div>
+                            <label>Categoría:</label>
+                            {{ form.categoria }}
+                        </div>
+                        <div>
+                            <label>Remitido Por:</label>
+                            {{ form.ter_origen }}
+                        </div>
+                        <div>
+                            <label>Localidad/Comuna:</label>
+                            {{ form.localidad }}
+                        </div>
+                        <div>
+                            <label>Barrio:</label>
+                            {{ form.barrio }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FINANCIEROS/FECHAS -->
+            <div class="section-container">
+                <div class="section">
+                    <h1>FINANCIEROS/FECHAS</h1><br>
+                    <div class="form-group">
+                        <div>
+                            <label>Cupo Aprobado:</label>
+                            {{ form.cuptot }}
+                        </div>
+                        <div>
+                            <label>Cupo Disponible:</label>
+                            {{ form.saldocup }}
+                        </div>
+                        <div>
+                            <label>Descuento:</label>
+                            {{ form.descuento }}
+                        </div>
+                        <div>
+                            <label>Zona:</label>
+                            {{ form.zonater }}
+                        </div>
+                        <div>
+                            <label>Fecha Creación:</label>
+                            {{ form.fecha_ini }}
+                        </div>
+                        <div>
+                            <label>Fecha Última Venta:</label>
+                            {{ form.fecha_fin }}
+                        </div>
+                        <div>
+                            <label>Observaciones:</label>
+                            {{ form.observa }}
+                        </div> 
+                    </div>
+                    <br>
+                    <hr>
+                    <div class="retenciones-container">
+                        <div class="retencion-header">
+                            <label>Descripción</label>
+                            <span>Valor Base</span>
+                            <span>% Retención</span>
+                        </div>
+                        <div class="retencion-row">
+                            <label>Retención Fuente:</label>
+                            {{ form.base_ret_fte }}
+                            {{ form.retfuente }}
+                        </div>
+                        <div class="retencion-row">
+                            <label>Retención I.C.A:</label>
+                            {{ form.base_ret_ica }}
+                            {{ form.retica }}
+                        </div>
+                        <div class="retencion-row">
+                            <label>Retención I.V.A:</label>
+                            {{ form.base_ret_iva }}
+                            {{ form.retiva }}
+                        </div>
+                    </div><hr><br>
+                    <div class="form-group">
+                        <label>Lista Base:</label>
+                        {{ form.lista_base }}
+                    </div><br><br>
+                </div>
+            </div>
+        </div>
+        <div class="align-center">
+            <button type="submit">Guardar</button>
+            <button type="reset">Limpiar</button>
+            <a href="{% url 'lista_terceros' %}"><button type="button">Registros</button></a>
+        </div>
+        <!-- FUNCIONES JAVASCRIPT -->
+<h3 style="display: none;"></h3> 
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const tipperField = document.getElementById("id_tipper");
+                const tipnitField = document.getElementById("id_tipnit");
+                const regimenField = document.getElementById("id_regimen_sim");
+        
+                // Función para establecer "Seleccionar" en todos los campos de selección al cargar
+                function establecerSeleccionarPorDefecto() {
+                    const selects = document.querySelectorAll("select"); // Selecciona todos los campos de selección
+                    selects.forEach(select => {
+                        if (!select.querySelector('option[value=""]')) {
+                            const defaultOption = document.createElement("option");
+                            defaultOption.value = "";
+                            defaultOption.textContent = "Seleccionar...";
+                            defaultOption.selected = true;
+                            select.insertBefore(defaultOption, select.firstChild);
+                        } else {
+                            select.querySelector('option[value=""]').selected = true;
+                        }
+                    });
+                }
+        
+                // Función para actualizar las opciones de Tipo de Documento
+                function actualizarOpciones() {
+                    const tipoPersona = tipperField.value;
+        
+                    // Limpia las opciones existentes
+                    while (tipnitField.firstChild) {
+                        tipnitField.removeChild(tipnitField.firstChild);
+                    }
+        
+                    // Opción predeterminada para Tipo de Documento
+                    const defaultOption = document.createElement("option");
+                    defaultOption.textContent = tipoPersona === "" ? "Seleccione tipo de persona" : "Seleccionar...";
+                    defaultOption.value = "";
+                    tipnitField.appendChild(defaultOption);
+        
+                    // Opciones para Persona Natural o Jurídica
+                    if (tipoPersona === "0") { // Persona Natural
+                        const opcionesNatural = [
+                            { value: "0", text: "Cédula de Ciudadanía" },
+                            { value: "3", text: "Tarjeta de Identidad" },
+                            { value: "4", text: "Registro Civil" },
+                            { value: "2", text: "Pasaporte" },
+                        ];
+                        opcionesNatural.forEach(opcion => {
+                            const optionElement = document.createElement("option");
+                            optionElement.value = opcion.value;
+                            optionElement.textContent = opcion.text;
+                            tipnitField.appendChild(optionElement);
+                        });
+                    } else if (tipoPersona === "1") { // Persona Jurídica
+                        const optionElement = document.createElement("option");
+                        optionElement.value = "1";
+                        optionElement.textContent = "NIT";
+                        tipnitField.appendChild(optionElement);
+                    }
+                }
+        
+                // Evento de cambio en Tipo de Persona
+                tipperField.addEventListener("change", actualizarOpciones);
+        
+                // Establece las opciones predeterminadas al cargar la página
+                establecerSeleccionarPorDefecto();
+                actualizarOpciones();
+            });
+
+            // Función para seleccionar el texto del campo
+            function selectText(element) {
+                element.select();
+            }
+        </script>
+        
+    </form>
+</body>
+</html>

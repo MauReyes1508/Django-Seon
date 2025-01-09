@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Terceros</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/lista.css' %}">
+    <link rel="website icon" type="icon" href="{% static 'images/Logo_Pacos.jpg' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <header>
+        <a href="{% url 'registro_terceros' %}">Regresar</a>
+        <h1>Lista de Terceros</h1>
+    </header>
+
+    <div class="container">
+        <!-- Barra de búsqueda -->
+        <form class="search-bar" method="get" action="">
+            <div class="search-input-container">
+                <input type="text" id="search-input" name="q" placeholder="Buscar..." value="{{ query }}" oninput="filterTable()" aria-label="Buscar por Nombre..." onfocus="selectText(this)"> 
+                <button type="button" id="clear-btn" class="clear-btn" onclick="clearSearch()" aria-label="Limpiar Busqueda">&#x2715;</button>
+            </div>
+            <button class="button-search" type="submit">Buscar</button>
+        </form>
+
+        <!-- Tabla con registros -->
+        <table id="tercerosTable">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Tipo de Documento</th>
+                    <th>N° Documento</th>
+                    <th>Nombres</th>
+                    <th>Apellido/Empresa</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tercero in terceros %}
+                    <tr>
+                        <td style="text-align: center;">{{ tercero.codter }}</td>
+                        <td>{{ tercero.get_tipnit_display }}</td>
+                        <td>{{ tercero.nitter }}</td>
+                        <td>{{ tercero.nomter|default:'////////////////////' }}</td>
+                        <td>{{ tercero.papter }}</td>
+                        <td>{{ tercero.celter|default:'Sin Registrar 📵' }}</td>
+                        <td>
+                            <div class="actions">
+                                <button type="button" class="edit-btn" onclick="openModal(
+                                    '{{ tercero.codter }}', 
+                                    '{{ tercero.fecha_ini|date:"d-m-Y"}}',
+                                    '{{ tercero.nomter|default:'Sin Nombre...' }}',
+                                    '{{ tercero.papter|default:'Apellido Sin Registrar...' }}',
+                                    '{{ tercero.sapter|default:'Apellido Sin Registrar...' }}',
+                                    '{{ tercero.nomcter|default:'Sin Nombre Comercial : /' }}',
+                                    '{{ tercero.get_tipper_display }}',
+                                    '{{ tercero.get_tipnit_display }}',
+                                    '{{ tercero.nitter }}',
+                                    '{{ tercero.direle|default:'Sin Registrar : /' }}',
+                                    '{{ tercero.celter|default:'Sin Registrar : /' }}',
+                                    '{{ tercero.paister }}',
+                                    '{{ tercero.ciuter }}',
+                                    '{{ tercero.dirter|default:'Sin Registrar : /' }}',
+                                    '{{ tercero.localidad|default:'No Registra Localidad...' }}',
+                                    '{{ tercero.barrio|default:'No Registra Barrio...' }}',
+                                    '{{ tercero.get_regimen_sim_display }}',
+                                    '{{ tercero.get_excen_iva_display }}',
+                                    '{{ tercero.get_ter_origen_display }}',
+                                    '{{ tercero.fecha_fin|date:"d-m-Y"}}',
+                                    '{{ tercero.cuptot|default:0 }}',
+                                    '{{ tercero.saldocup|default:0 }}',
+                                    '{{ tercero.descuento|default:0 }}',
+                                    '{{ tercero.zonater|default:'Sin Zona...' }}',
+                                    '{{ tercero.plazofac|default:0 }}',
+                                    '{{ tercero.vendedor|default:0 }}',
+                                    '{{ tercero.cta_banco|default:0 }}',
+                                    '{{ tercero.cod_banco|default:0 }}',
+                                    '{{ tercero.get_tipo_cta_display|default:'No Registra Cuenta...' }}',
+                                    '{{ tercero.categoria|default:'Categoría No Registrada...' }}',
+                                    '{{ tercero.base_ret_fte|default:0 }}',
+                                    '{{ tercero.retfuente|default:0 }}',
+                                    '{{ tercero.base_ret_ica|default:0 }}',
+                                    '{{ tercero.retica|default:0 }}',
+                                    '{{ tercero.base_ret_iva|default:0 }}',
+                                    '{{ tercero.retiva|default:0 }}',
+                                    '{{ tercero.lista_base|default:0 }}',
+                                    '{{ tercero.observa }}'
+                                )">Ver más...</button>
+                                
+                                <form method="post" action="" style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="eliminar_id" value="{{ tercero.codter }}">
+                                    <button type="submit" class="delete-btn">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="empty-message">No se encontraron registros. 🤕</td>
+                        <td colspan="6" class="empty-message">Sin Acciones... ☠️</td>   
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Ventana Modal -->
+    <div id="editModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>Detalles del Tercero</h2>
+            <form id="editForm" method="post" action="{% url 'actualizar_tercero' %}">
+                {% csrf_token %}
+                <input type="hidden" name="codter" id="modalCodter">
+                
+                <div class="form-group">
+                    <label for="modalFecha_ini">Fecha de Creación:</label>
+                    <input type="date" name="fecha_ini" id="modalFecha_ini" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalNomter">Nombre:</label>
+                    <input type="text" name="nomter" id="modalNomter" onfocus="selectText(this)" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalPapter">Primer Apellido/Empresa:</label>
+                    <input type="text" name="papter" id="modalPapter" onfocus="selectText(this)" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalSapter">Segundo Apellido:</label>
+                    <input type="text" name="sapter" id="modalSapter" onfocus="selectText(this)">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalNomcter">Nombre Comercial:</label>
+                    <input type="text" name="nomcter" id="modalNomcter" onfocus="selectText(this)">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalTipper">Tipo de Persona:</label>
+                    <select name="tipper" id="modalTipper">
+                        <option value="0">Natural</option>
+                        <option value="1">Jurídica</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalTipnit">Tipo de Documento:</label>
+                    <select name="tipnit" id="modalTipnit">
+                        <option value="0">Cédula de Ciudadanía</option>
+                        <option value="1">NIT</option>
+                        <option value="2">Pasaporte</option>
+                        <option value="3">Tarjeta de Identidad</option>
+                        <option value="4">Registro Civil</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label id="modalNitterLabel" for="modalNitter">Número de Identificación:</label>
+                    <input type="text" name="nitter" id="modalNitter" onfocus="selectText(this)">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalDirele">Email:</label>
+                    <input type="text" name="direle" id="modalDirele" onfocus="selectText(this)">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalCelter">Teléfono:</label>
+                    <input type="text" name="celter" id="modalCelter" onfocus="selectText(this)">
+                </div>
+<!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+                <div class="form-group">
+                    <label for="modalPaister">País:</label>
+                    <input type="text" name="paister" id="modalPaister" onfocus="selectText(this)">
+
+                </div>
+
+                <div class="form-group">
+                    <label for="modalCiudad">Ciudad:</label>
+                    <input type="text" name="ciuter" id="modalCiudad" onfocus="selectText(this)">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalDireccion">Dirección:</label>
+                    <input type="text" name="dirter" id="modalDireccion" onfocus="selectText(this)">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalLocalidad">Localidad o Comuna:</label>
+                    <input type="text" name="localidad" id="modalLocalidad" onfocus="selectText(this)">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalBarrio">Barrio:</label>
+                    <input type="text" name="barrio" id="modalBarrio" onfocus="selectText(this)">
+                </div>
+
+                <div class="form-group">
+                    <label for="modalRegimen">Régimen Simplificado:</label>
+                    <select name="regimen_sim" id="modalRegimen">
+                        <option value="">Sin Seleccionar...</option>
+                        <option value="V">Si Aplica</option>
+                        <option value="F">No Aplica</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalExcen_iva">Excento de IVA:</label>
+                    <select name="excen_iva" id="modalExcen_iva">
+                        <option value="">Sin Seleccionar...</option>
+                        <option value="V">Si Aplica</option>
+                        <option value="F">No Aplica</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalRemitido">Remitido Por:</label>
+                    <select name="ter_origen" id="modalRemitido">
+                        <option value="">Sin Origen...</option>
+                        <option value="0">Comercial</option>
+                        <option value="1">Internet</option>
+                        <option value="2">Recomendación</option>
+                        <option value="3">Cursos</option>
+                        <option value="4">Publicidad</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="modalFecha_fin">Fecha de Última Venta:</label>
+                    <input type="date" name="fecha_fin" id="modalFecha_fin">
+                </div>
+                <br>
+                <hr> 
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////-->                   
+                <h2>Financiero</h2>
+                <div class="form-group">
+                    <label for="modalCupoApr">Cupo Aprobado:</label>
+                    <input type="number" name="cuptot" id="modalCupoApr" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalCupoDis">Cupo Disponible:</label>
+                    <input type="number" name="saldocup" id="modalCupoDis" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalDes">Descuento Del:</label>
+                    <input type="number" name="descuento" id="modalDes" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalZona">Zona:</label>
+                    <input type="text" name="zonater" id="modalZona" onfocus="selectText(this)">
+                </div>
+                <br>
+                <hr>
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////// -->
+                <h2>OTROS</h2>
+                <div class="form-group">
+                    <label for="modalPlazo">Plazo en Días:</label>
+                    <input type="number" name="plazofac" id="modalPlazo" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalVendedor">Vendedor:</label>
+                    <input type="number" name="vendedor" id="modalVendedor" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalCta_banco">Cuenta de Banco:</label>
+                    <input type="number" name="cta_banco" id="modalCta_banco" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalCod_banco">Código de Banco</label>
+                    <input type="number" name="cod_banco" id="modalCod_banco" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalTipo_cta">Tipo de Cuenta:</label>
+                    <select name="tipo_cta" id="modalTipo_cta">
+                        <option value="">Sin Seleccionar...</option>
+                        <option value="0">Corriente</option>
+                        <option value="1">Ahorros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="modalCategoria">Categoría:</label>
+                    <input type="text" name="categoria" id="modalCategoria" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalBaseRetF">Base de Retención en la Fuente:</label>
+                    <input type="number" name="base_ret_fte" id="modalBaseRetF" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalReteF">% Retención en la Fuente:</label>
+                    <input type="number" name="retfuente" id="modalReteF" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalBaseRetIca">Base Retención I.C.A:</label>
+                    <input type="number" name="base_ret_ica" id="modalBaseRetIca" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalRetIca">% Retención I.C.A:</label>
+                    <input type="number" name="retica" id="modalRetIca" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalBaseRetiva">Base Retención I.V.A</label>
+                    <input type="number" name="base_ret_iva" id="modalBaseRetiva" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalRetIva">% Retención I.V.A:</label>
+                    <input type="number" name="retiva" id="modalRetIva" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalLista_base">Lista Base:</label>
+                    <input type="number" name="lista_base" id="modalLista_base" onfocus="selectText(this)">
+                </div>
+                <div class="form-group">
+                    <label for="modalObserva">Observaciones:</label>
+                    <textarea name="observa" id="modalObserva" onfocus="selectText(this)" placeholder="Registra Una Observación"></textarea>
+                </div>
+                <hr>
+                <div class="modal-actions">
+                    <button type="submit" class="save-btn" onclick="alertaGuardado()">Guardar</button>
+                    <button type="button" class="close-modal-btn" onclick="closeModal()">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+        <script>
+            const modal = document.getElementById('editModal');
+            let initialValues = {};
+        
+            function openModal(codter, fecha_ini, nomter, papter, sapter, nomcter, tipper, tipnit, nitter, direle, celter, paister, 
+                ciuter, dirter, localidad, barrio, regimen_sim, excen_iva, ter_origen, fecha_fin, cuptot, saldocup, descuento, zonater, plazofac, vendedor, cta_banco,
+                cod_banco, tipo_cta, categoria, base_ret_fte, retfuente, base_ret_ica, retica, base_ret_iva, retiva, lista_base, observa) {
+        
+                // Asignar valores a los campos del modal
+                document.getElementById('modalCodter').value = codter || '';
+                document.getElementById('modalFecha_ini').value = fecha_ini ? fecha_ini.split('-').reverse().join('-') : '';
+                document.getElementById('modalNomter').value = nomter || '';
+                document.getElementById('modalPapter').value = papter || '';
+                document.getElementById('modalSapter').value = sapter || '';
+                document.getElementById('modalNomcter').value = nomcter || '';
+        
+                const tipperField = document.getElementById('modalTipper');
+                if (tipperField) {
+                    for (let option of tipperField.options) {
+                        if (option.text.trim() === tipper.trim()) {
+                            option.selected = true;
+                            break;
+                        }
+                    }
+                }
+        
+                const tipnitField = document.getElementById('modalTipnit');
+                if (tipnitField) {
+                    for (let option of tipnitField.options) {
+                        if (option.text.trim() === tipnit.trim()) {
+                            option.selected = true;
+                            break;
+                        }
+                    }
+                }
+        
+                document.getElementById('modalNitter').value = nitter || '';
+                document.getElementById('modalDirele').value = direle || '';
+                document.getElementById('modalCelter').value = celter || '';
+                document.getElementById('modalPaister').value = paister || '';
+                document.getElementById('modalCiudad').value = ciuter || '';
+                document.getElementById('modalDireccion').value = dirter || '';
+                document.getElementById('modalLocalidad').value = localidad || '';
+                document.getElementById('modalBarrio').value = barrio || '';
+        
+                const regimenField = document.getElementById('modalRegimen');
+                if (regimenField) {
+                    for (let option of regimenField.options) {
+                        option.selected = option.text.trim() === regimen_sim.trim();
+                        if(option.text.trim() === regimen_sim.trim()) {
+                            option.selected = true;
+                            break;
+                        }
+                    }
+                }
+        
+                const excentoIVAField = document.getElementById('modalExcen_iva');
+                if (excentoIVAField) {
+                    for (let option of excentoIVAField.options) {
+                        option.selected = option.text.trim() === excen_iva.trim();
+                        if(option.text.trim() === excen_iva.trim()) {
+                            option.selected = true;
+                            break;
+                        }
+                    }
+                }
+
+                const ter_origenField = document.getElementById('modalRemitido');
+                if (ter_origenField) {
+                    for (let option of ter_origenField.options) {
+                        option.selected = option.text.trim() === ter_origen.trim();
+                        if(option.text.trim() === ter_origen.trim()) {
+                            option.selected = true;
+                            break;
+                        }
+                    }
+                }
+
+                document.getElementById('modalFecha_fin').value = fecha_fin ? fecha_fin.split('-').reverse().join('-') : '';
+        
+                // Financiero
+                document.getElementById('modalCupoApr').value = cuptot || '';
+                document.getElementById('modalCupoDis').value = saldocup || '';
+                document.getElementById('modalZona').value = zonater || '';
+                document.getElementById('modalDes').value = descuento || '';
+        
+                // OTROS
+                document.getElementById('modalPlazo').value = plazofac || '';
+                document.getElementById('modalVendedor').value = vendedor || '';
+                document.getElementById('modalCta_banco').value = cta_banco || '';
+                document.getElementById('modalCod_banco').value = cod_banco || '';
+
+                const tipoCtaField = document.getElementById('modalTipo_cta');
+                if (tipo_cta && tipoCtaField) {
+                    for (let option of tipoCtaField.options) {
+                        if (option.text.trim() === tipo_cta.trim()) {
+                            option.selected = true;
+                            break;
+                        }
+                    }
+                }
+        
+                document.getElementById('modalCategoria').value = categoria || '';
+                document.getElementById('modalBaseRetF').value = base_ret_fte || '';
+                document.getElementById('modalReteF').value = retfuente || '';
+                document.getElementById('modalBaseRetIca').value = base_ret_ica || '';
+                document.getElementById('modalRetIca').value = retica || '';
+                document.getElementById('modalBaseRetiva').value = base_ret_iva || '';
+                document.getElementById('modalRetIva').value = retiva || '';
+                document.getElementById('modalLista_base').value = lista_base || '';
+                document.getElementById('modalObserva').value = observa || '';
+        
+                // Mostrar el modal
+                modal.style.display = 'block';
+            }
+        
+            function closeModal() {
+                modal.style.display = 'none';
+            }
+        
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            };
+
+            // Función seleccionar el texto del campo
+            function selectText(element) {
+                element.select();
+            }
+        
+            // función para filtrar los datos de búsqueda
+            function filterTable() {
+                const input = document.getElementById('search-input').value.toLowerCase();
+                const normalizedInput = input.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Normaliza el texto de entrada
+                const rows = document.querySelectorAll('#tercerosTable tbody tr');
+            
+                rows.forEach(row => {
+                    let match = false;
+                    for (let i = 0; i < row.cells.length; i++) {
+                        const cellText = row.cells[i].textContent.toLowerCase();
+                        const normalizedCellText = cellText.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Normaliza el texto de las celdas
+            
+                        if (normalizedCellText.includes(normalizedInput)) {
+                            match = true;
+                            break;
+                        }
+                    }
+                    row.style.display = match ? '' : 'none';
+                });
+            }
+            
+            
+        
+            // Limpiar búsqueda
+            function clearSearch() {
+                const searchInput = document.getElementById('search-input');
+                searchInput.value = '';
+                const rows = document.querySelectorAll('#tercerosTable tbody tr');
+                rows.forEach(row => {
+                    row.style.display = '';
+                });
+                document.getElementById('clear-btn').style.display = 'none'; // Asegura ocultar el botón de limpiar
+            }
+            
+            document.getElementById('search-input').addEventListener('input', function () {
+                const clearBtn = document.getElementById('clear-btn');
+                clearBtn.style.display = this.value ? 'inline' : 'none';
+                filterTable();
+            });
+            
+                    // Enviar datos del formulario con AJAX
+                    function submitForm() {
+                        const formData = new FormData(document.getElementById('editForm'));
+                        fetch("{% url 'actualizar_tercero' %}", {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire("¡Éxito!", "Se guardaron los cambios.", "success");
+                                closeModal();
+                            } else {
+                                Swal.fire("Error", "No se pudo guardar.", "error");
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire("Error", "Error de red.", "error");
+                        });
+                    }
+        </script>
+</body>
+</html>
+
+            
