@@ -50,6 +50,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+
+
 ROOT_URLCONF = 'seon.urls'
 
 TEMPLATES = [
@@ -77,12 +80,14 @@ WSGI_APPLICATION = 'seon.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'firebird',
-        'NAME': '/home/raul/bases/terceros.fdb',
+        'NAME': '/home/raul/bases/terceros_restored.fdb',
         'USER': 'SYSDBA',
         'PASSWORD': '123',
         'HOST': '127.0.0.1',
         'PORT': '3050',
-        'OPTIONS': {'charset': 'UTF8'},
+        'OPTIONS': {
+            'charset': 'UTF8',
+        },
     } 
 }
 
@@ -102,11 +107,8 @@ LOGGING = {
     },
 }
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
-
-
-
+SESSION_ENGINE = 'django.contrib.sessions.backends.db' 
 
 
 
@@ -148,8 +150,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'seon','staticfiles'
-STATICFILES_DIR = [BASE_DIR / 'seon','static']
+STATIC_ROOT = BASE_DIR / 'seon/staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'seon/static']
+
+
+LOGIN_REDIRECT_URL = '/menu_rutinas/'
 
 
 # Default primary key field type

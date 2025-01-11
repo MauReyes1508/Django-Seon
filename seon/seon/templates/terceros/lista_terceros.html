@@ -46,41 +46,42 @@
                         <td>{{ tercero.get_tipnit_display }}</td>
                         <td>{{ tercero.nitter }}</td>
                         <td>{{ tercero.nomter|default:'////////////////////' }}</td>
-                        <td>{{ tercero.papter }}</td>
+                        <td>{{ tercero.papter|default:'//////////////////////////////' }}</td>
                         <td>{{ tercero.celter|default:'Sin Registrar 📵' }}</td>
                         <td>
                             <div class="actions">
                                 <button type="button" class="edit-btn" onclick="openModal(
                                     '{{ tercero.codter }}', 
                                     '{{ tercero.fecha_ini|date:"d-m-Y"}}',
-                                    '{{ tercero.nomter|default:'Sin Nombre...' }}',
-                                    '{{ tercero.papter|default:'Apellido Sin Registrar...' }}',
-                                    '{{ tercero.sapter|default:'Apellido Sin Registrar...' }}',
-                                    '{{ tercero.nomcter|default:'Sin Nombre Comercial : /' }}',
+                                    '{{ tercero.nomter|default:'' }}',
+                                    '{{ tercero.papter|default:'' }}',
+                                    '{{ tercero.sapter|default:'' }}',
+                                    '{{ tercero.nomcter|default:'' }}',
                                     '{{ tercero.get_tipper_display }}',
                                     '{{ tercero.get_tipnit_display }}',
                                     '{{ tercero.nitter }}',
-                                    '{{ tercero.direle|default:'Sin Registrar : /' }}',
-                                    '{{ tercero.celter|default:'Sin Registrar : /' }}',
+                                    '{{ tercero.direle|default:'' }}',
+                                    '{{ tercero.celter|default:'' }}',
                                     '{{ tercero.paister }}',
                                     '{{ tercero.ciuter }}',
-                                    '{{ tercero.dirter|default:'Sin Registrar : /' }}',
-                                    '{{ tercero.localidad|default:'No Registra Localidad...' }}',
-                                    '{{ tercero.barrio|default:'No Registra Barrio...' }}',
+                                    '{{ tercero.dirter|default:'' }}',
+                                    '{{ tercero.localidad|default:'' }}',
+                                    '{{ tercero.barrio|default:'' }}',
                                     '{{ tercero.get_regimen_sim_display }}',
                                     '{{ tercero.get_excen_iva_display }}',
                                     '{{ tercero.get_ter_origen_display }}',
+                                    '{{ tercero.des_origen|default:'' }}',
                                     '{{ tercero.fecha_fin|date:"d-m-Y"}}',
                                     '{{ tercero.cuptot|default:0 }}',
                                     '{{ tercero.saldocup|default:0 }}',
                                     '{{ tercero.descuento|default:0 }}',
-                                    '{{ tercero.zonater|default:'Sin Zona...' }}',
+                                    '{{ tercero.zonater|default:'' }}',
                                     '{{ tercero.plazofac|default:0 }}',
                                     '{{ tercero.vendedor|default:0 }}',
                                     '{{ tercero.cta_banco|default:0 }}',
                                     '{{ tercero.cod_banco|default:0 }}',
-                                    '{{ tercero.get_tipo_cta_display|default:'No Registra Cuenta...' }}',
-                                    '{{ tercero.categoria|default:'Categoría No Registrada...' }}',
+                                    '{{ tercero.get_tipo_cta_display|default:'' }}',
+                                    '{{ tercero.categoria|default:'' }}',
                                     '{{ tercero.base_ret_fte|default:0 }}',
                                     '{{ tercero.retfuente|default:0 }}',
                                     '{{ tercero.base_ret_ica|default:0 }}',
@@ -234,6 +235,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="modalOrigen">Descripción del Remitente:</label>
+                    <input type="text" name="des_origen" id="modalOrigen">
+                </div>
+
+                <div class="form-group">
                     <label for="modalFecha_fin">Fecha de Última Venta:</label>
                     <input type="date" name="fecha_fin" id="modalFecha_fin">
                 </div>
@@ -336,8 +342,9 @@
             let initialValues = {};
         
             function openModal(codter, fecha_ini, nomter, papter, sapter, nomcter, tipper, tipnit, nitter, direle, celter, paister, 
-                ciuter, dirter, localidad, barrio, regimen_sim, excen_iva, ter_origen, fecha_fin, cuptot, saldocup, descuento, zonater, plazofac, vendedor, cta_banco,
-                cod_banco, tipo_cta, categoria, base_ret_fte, retfuente, base_ret_ica, retica, base_ret_iva, retiva, lista_base, observa) {
+                ciuter, dirter, localidad, barrio, regimen_sim, excen_iva, ter_origen, des_origen, fecha_fin, cuptot, saldocup, descuento, zonater, 
+                plazofac, vendedor, cta_banco, cod_banco, tipo_cta, categoria, base_ret_fte, retfuente, base_ret_ica, retica, base_ret_iva, 
+                retiva, lista_base, observa) {
         
                 // Asignar valores a los campos del modal
                 document.getElementById('modalCodter').value = codter || '';
@@ -409,6 +416,7 @@
                     }
                 }
 
+                document.getElementById('modalOrigen').value = des_origen || '';
                 document.getElementById('modalFecha_fin').value = fecha_fin ? fecha_fin.split('-').reverse().join('-') : '';
         
                 // Financiero

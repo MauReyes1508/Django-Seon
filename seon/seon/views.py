@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
+from django.db.models import Q
 
 from .models import Tercero
 from .form import LoginForm, TerceroForm, UserRegistrationForm
 
+# Registro de un usuario
 @user_passes_test(lambda u: u.is_superuser)
 def register_user(request):
     if request.method == 'POST':
@@ -18,51 +20,64 @@ def register_user(request):
 
     return render(request, 'register.html', {'form': form})
 
+# Verificación de creedenciales e inicio de sesión
 def login_view(request):
     if request.method == "POST":
-        form = LoginForm(request.POST)
+        form = LoginForm(request, data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('menu_rutinas')  # Redirigir al menú de rutinas
-            else:
-                form.add_error(None, 'Credenciales inválidas.')
+            user = form.get_user()
+            login(request, user)
+            messages.success(request, f"Bienvenido, {user.username}!")
+            return redirect('menu_rutinas')
+        else:
+            messages.error(request, "Credenciales inválidas.")
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
+
+
 @login_required
 def menu_rutinas(request):
-    return render(request, 'menu_rutinas.html')
+    usuario = request.session.get('usuario', None)
+    print(f"Usuario actual: {usuario}")
+    return render(request, 'menu_rutinas.html', {'usuario': usuario})
+
+@login_required
+def logout_view(request):
+    logout(request)
+    print(request.session.items())
+    messages.success(request, "Has cerrado sesión exitosamente.")
+    return redirect('login') 
+
 
 ############## REGISTRO DE TERCEROS ###################################################################################
 
 def registro_terceros(request):
-    # Manejo de creación de nuevos registros
     if request.method == 'POST':
-        print(request.POST)
         form = TerceroForm(request.POST)
         if form.is_valid():
-            print("Formulario Valido")
+            print("Formulario válido")
             form.save()  # Guarda el nuevo registro.
             messages.success(request, "Registro Guardado Correctamente")
             return redirect('registro_terceros')  # Redirige a la lista de registros.
         else:
-            print(form.errors)
-            print(request, "Error al guardar el formulario. Revisa los datos ingresados.", form.errors)
+            print("Errores en el formulario:", form.errors)
+            # Aquí, pasamos los errores directamente a la plantilla
+            return render(request, 'terceros/registro_terceros.html', {
+                'form': form,
+                'errors': form.errors
+            })
     else:
         form = TerceroForm()  # Inicializa un formulario vacío para GET.
 
+    return render(request, 'terceros/registro_terceros.html', {
+        'form': form,
+        'errors': form.errors if form.errors else None,
+    })
 
-    return render(request, 'terceros/registro_terceros.html', {'form' : form})
 
 
-
-
-from django.db.models import Q
 
 def lista_terceros(request):
     # Obtener el término de búsqueda desde la URL

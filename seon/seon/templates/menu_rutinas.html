@@ -3,16 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio de Sesión</title>
-
+    <title>Menú de Rutinas</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
     <link rel="website icon" type="icon" href="{% static 'images/Logo_Pacos.jpg' %}">
-
-
 </head>
 <body>
-
+    <header class="header">
+        <div class="header-content">
+            <h1>Bienvenido: {{ user.username }}, A La Plataforma WEB de Seon</h1>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">Cerrar Sesión</button>
+            </form>
+        </div>
+    </header>
+    <main class="main-content">
+        <section class="routine-section">
+            <h2>Selecciona Una Rutina</h2>
+            <div class="routine-item">
+                <span>Registro de Terceros</span>
+                <a href="{% url 'registro_terceros' %}"><button class="routine-btn">Ir</button></a>
+            </div>
+            <div class="routine-item">
+                <span>Rutina En Proceso</span>
+                <button class="routine-btn">Ir</button>
+            </div>
+            <div class="routine-item">
+                <span>Rutina En Proceso</span>
+                <button class="routine-btn">Ir</button>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
-

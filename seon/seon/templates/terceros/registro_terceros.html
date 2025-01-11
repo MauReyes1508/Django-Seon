@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es"> 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,235 +14,254 @@
     <form method="POST" action="{% url 'registro_terceros' %}">
         {% csrf_token %}
         <div class="container">
+            <!-- Contenedor padre con diseño flex -->
+            <div class="row">
+                <!-- IDENTIFICACIÓN -->
+                <div class="section-container">
+                    <div class="section">
+                        <h1>IDENTIFICACIÓN</h1><br>
+                        <div class="form-group">
+                            <div>
+                                <label>Nombres:</label>
+                                {{ form.nomter }}
+                            </div>
+                            <div>
+                                <label>Apellido 1/Empresa:</label>
+                                {{ form.papter }}
+                            </div>
+                            <div>
+                                <label>Apellido 2:</label>
+                                {{ form.sapter }}
+                            </div>
+                            <div>
+                                <label>Nombre Comercial:</label>
+                                {{ form.nomcter }}
+                            </div>
+                            <div>
+                                <label for="id_nitter">Documento/Nit:</label>
+                                {{ form.nitter }}
+                            </div>                            
+                            <div>
+                                <label>Tipo Persona:</label>
+                                {{ form.tipper }}
+                            </div>
+                            <div>
+                                <label>Tipo Documento:</label>
+                                {{ form.tipnit }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- IDENTIFICACIÓN - 2 -->
+                <div class="section-container">
+                    <div class="section">
+                        <h1>IDENTIFICACIÓN - 2</h1><br>
+                        <div class="form-group">
+                            <div>
+                                <label>Tipo de Tercero:</label>
+                                {{ form.tipter }}
+                            </div>
+                            <div>
+                                <label>Régimen Simplificado:</label>
+                                {{ form.regimen_sim }}
+                            </div>
+                            <div>
+                                <label>Exento de IVA:</label>
+                                {{ form.excen_iva }}
+                            </div>
+                            <div>
+                                <label>Contacto:</label>
+                                {{ form.contacto }}
+                            </div>
+                            <div>
+                                <label>Cargo:</label>
+                                {{ form.cgo_contac }}
+                            </div>
+                            <div>
+                                <label>Barrio:</label>
+                                {{ form.barrio }}
+                            </div>
+                            <div class="form-group">
+                                <label>Lista Base:</label>
+                                {{ form.lista_base }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- UBICACIÓN -->
+                <div class="section-container">
+                    <div class="section">
+                        <h1>UBICACIÓN</h1><br>
+                        <div class="form-group">
+                            <div>
+                                <label>País:</label>
+                                {{ form.paister }}
+                            </div>
+                            <div>
+                                <label>Ciudad:</label>
+                                {{ form.ciuter }}
+                            </div>
+                            <div>
+                                <label>Dirección:</label>
+                                {{ form.dirter }}
+                            </div>
+                            <div>
+                                <label>Teléfonos:</label>
+                                {{ form.telter }}
 
-            <!-- IDENTIFICACIÓN -->
-            <div class="section-container">
-                <div class="section">
-                    <h1>IDENTIFICACIÓN</h1><br>
-                    <div class="form-group">
-                        <div>
-                            <label>Nombres:</label>
-                            {{ form.nomter }}
+                            </div>
+                            <div>
+                                <label>Móvil:</label>
+                                {{ form.celter }}
+                            </div>
+                            <div>
+                                <label>Email:</label>
+                                {{ form.direle }}
+                            </div>
+                            <div>
+                                <label>Localidad/Comuna:</label>
+                                {{ form.localidad }}
+                            </div>
                         </div>
-                        <div>
-                            <label>Apellido 1/Empresa:</label>
-                            {{ form.papter }}
-                        </div>
-                        <div>
-                            <label>Apellido 2:</label>
-                            {{ form.sapter }}
-                        </div>
-                        <div>
-                            <label>Nombre Comercial:</label>
-                            {{ form.nomcter }}
-                        </div>
-                        <div>
-                            <label>Documento/Nit:</label>
-                            {{ form.nitter }}
-                            {% if form.nitter.errors %}
-                                <div class="error">{{ form.nitter.errors }}</div>
-                            {% endif %}
-                        </div>
-                        <div>
-                            <label>Tipo Documento:</label>
-                            {{ form.tipnit }}
+                    </div>
+                </div>
+        
+                <!-- OTROS -->
+                <div class="section-container">
+                    <div class="section">
+                        <h1>OTROS</h1><br>
+                        <div class="form-group">
+                            <div>
+                                <label>Plazo en Días:</label>
+                                {{ form.plazofac }}
+                            </div>
+                            <div>
+                                <label>Vendedor:</label>
+                                {{ form.vendedor }}
+                            </div>
+                            <div>
+                                <label>Cuenta de Banco:</label>
+                                {{ form.cta_banco }}
+                            </div>
+                            <div>
+                                <label>Código de Banco:</label>
+                                {{ form.cod_banco }}
+                            </div>
+                            <div>
+                                <label>Tipo de Cuenta:</label>
+                                {{ form.tipo_cta }}
+                            </div>
+                            <div>
+                                <label>Categoría:</label>
+                                {{ form.categoria }}
+                            </div>
+                            <div>
+                                <label>Remitido Por:</label>
+                                {{ form.ter_origen }}
+                            </div>
+                            <div>
+                                <label></label>
+                                {{ form.des_origen }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- IDENTIFICACIÓN - 2 -->
-            <div class="section-container">
-                <div class="section">
-                    <h1>IDENTIFICACIÓN - 2</h1><br>
-                    <div class="form-group">
-                        <div>
-                            <label>Tipo Persona:</label>
-                            {{ form.tipper }}
-                        </div>
-                        <div>
-                            <label>Tipo de Tercero:</label>
-                            {{ form.tipter }}
-                        </div>
-                        <div>
-                            <label>Régimen Simplificado:</label>
-                            {{ form.regimen_sim }}
-                        </div>
-                        <div>
-                            <label>Exento de IVA:</label>
-                            {{ form.excen_iva }}
-                        </div>
-                        <div>
-                            <label>Contacto:</label>
-                            {{ form.contacto }}
-                        </div>
-                        <div>
-                            <label>Cargo:</label>
-                            {{ form.cgo_contac }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- UBICACIÓN -->
-            <div class="ubicacion-container section-container">
-                <div class="section">
-                    <h1>UBICACIÓN</h1><br>
-                    <div class="form-group">
-                        <div>
-                            <label>País:</label>
-                            {{ form.paister }}
-                        </div>
-                        <div>
-                            <label>Ciudad:</label>
-                            {{ form.ciuter }}
-                        </div>
-                        <div>
-                            <label>Dirección:</label>
-                            {{ form.dirter }}
-                        </div>
-                        <div>
-                            <label>Teléfonos:</label>
-                            {{ form.telter }}
-                            {% if form.telter.errors %}
-                                <div class="error">{{ form.telter.errors }}</div>
-                            {% endif %}
-                        </div>
-                        <div>
-                            <label>Móvil:</label>
-                            {{ form.celter }}
-                            {% if form.celter.errors %}
-                                <div class="error">{{ form.celter.errors }}</div>
-                            {% endif %}
-                        </div>
-                        <div>
-                            <label>Email:</label>
-                            {{ form.direle }}
-                            {% if form.direle.errors %}
-                                <div class="error">{{ form.direle.errors }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- OTROS -->
-            <div class="section-container">
-                <div class="section">
-                    <h1>OTROS</h1><br>
-                    <div class="form-group">
-                        <div>
-                            <label>Plazo en Días:</label>
-                            {{ form.plazofac }}
-                        </div>
-                        <div>
-                            <label>Vendedor:</label>
-                            {{ form.vendedor }}
-                        </div>
-                        <div>
-                            <label>Cuenta de Banco:</label>
-                            {{ form.cta_banco }}
-                        </div>
-                        <div>
-                            <label>Código de Banco:</label>
-                            {{ form.cod_banco }}
-                        </div>
-                        <div>
-                            <label>Tipo de Cuenta:</label>
-                            {{ form.tipo_cta }}
-                        </div>
-                        <div>
-                            <label>Categoría:</label>
-                            {{ form.categoria }}
-                        </div>
-                        <div>
-                            <label>Remitido Por:</label>
-                            {{ form.ter_origen }}
-                        </div>
-                        <div>
-                            <label>Localidad/Comuna:</label>
-                            {{ form.localidad }}
-                        </div>
-                        <div>
-                            <label>Barrio:</label>
-                            {{ form.barrio }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- FINANCIEROS/FECHAS -->
             <div class="section-container">
                 <div class="section">
                     <h1>FINANCIEROS/FECHAS</h1><br>
-                    <div class="form-group">
-                        <div>
-                            <label>Cupo Aprobado:</label>
-                            {{ form.cuptot }}
+                    <div class="form-group financieros">
+                        <!-- Primera columna -->
+                        <div class="column">
+                            <div>
+                                <label class="label1">Cupo Aprobado:</label>
+                                {{ form.cuptot }}
+                            </div>
+                            <div>
+                                <label class="label1">Cupo Disponible:</label>
+                                {{ form.saldocup }}
+                            </div>
+                            <div class="descuento">
+                                <label>Descuento:</label>
+                                {{ form.descuento }}
+                            </div>
+                            <div class="zona">
+                                <label>Zona:</label>
+                                {{ form.zonater }}
+                            </div>
+                            <div class="fecha2">
+                                <label>Fecha Creación:</label>
+                                {{ form.fecha_ini }}
+                            </div>
+
                         </div>
-                        <div>
-                            <label>Cupo Disponible:</label>
-                            {{ form.saldocup }}
-                        </div>
-                        <div>
-                            <label>Descuento:</label>
-                            {{ form.descuento }}
-                        </div>
-                        <div>
-                            <label>Zona:</label>
-                            {{ form.zonater }}
-                        </div>
-                        <div>
-                            <label>Fecha Creación:</label>
-                            {{ form.fecha_ini }}
-                        </div>
-                        <div>
-                            <label>Fecha Última Venta:</label>
-                            {{ form.fecha_fin }}
+            
+                        <!-- Segunda columna: Retenciones -->
+                        <div class="column retenciones-container">
+                            <div class="retencion-row">
+                                <label>Retención Fuente:</label>
+                                {{ form.base_ret_fte }}
+                                {{ form.retfuente }}
+                            </div>
+                            <div class="retencion-row">
+                                <label>Retención I.C.A:</label>
+                                {{ form.base_ret_ica }}
+                                {{ form.retica }}
+                            </div>
+                            <div class="retencion-row">
+                                <label>Retención I.V.A:</label>
+                                {{ form.base_ret_iva }}
+                                {{ form.retiva }}
+                            </div>
+                            <div class="fecha">
+                                <label>Fecha Última Venta:</label>
+                                {{ form.fecha_fin }}
+                            </div>x
                         </div>
                         <div>
                             <label>Observaciones:</label>
                             {{ form.observa }}
-                        </div> 
+                        </div>
                     </div>
-                    <br>
-                    <hr>
-                    <div class="retenciones-container">
-                        <div class="retencion-header">
-                            <label>Descripción</label>
-                            <span>Valor Base</span>
-                            <span>% Retención</span>
-                        </div>
-                        <div class="retencion-row">
-                            <label>Retención Fuente:</label>
-                            {{ form.base_ret_fte }}
-                            {{ form.retfuente }}
-                        </div>
-                        <div class="retencion-row">
-                            <label>Retención I.C.A:</label>
-                            {{ form.base_ret_ica }}
-                            {{ form.retica }}
-                        </div>
-                        <div class="retencion-row">
-                            <label>Retención I.V.A:</label>
-                            {{ form.base_ret_iva }}
-                            {{ form.retiva }}
-                        </div>
-                    </div><hr><br>
-                    <div class="form-group">
-                        <label>Lista Base:</label>
-                        {{ form.lista_base }}
-                    </div><br><br>
                 </div>
-            </div>
-        </div>
+            </div>            
+        </div><br><br>
         <div class="align-center">
             <button type="submit">Guardar</button>
             <button type="reset">Limpiar</button>
             <a href="{% url 'lista_terceros' %}"><button type="button">Registros</button></a>
+            <a href="{% url 'menu_rutinas' %}"><button type="button">Regresar</button></a>
         </div>
+        </div>
+
+        <!-- Modal de alerta -->
+        <div id="alertModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h4>Se encontraron los siguientes errores:</h4>
+                <ul id="errorList">
+                    <!-- Los errores del formulario se insertarán dinámicamente aquí -->
+                    {% if errors %}
+                        {% for field in form %}
+                            {% if field.errors %}
+                                <li>
+                                    <strong>{{ field.label }}:</strong>  <!-- Muestra el nombre del campo -->
+                                    <div style="margin-top: 5px; margin-bottom: 10px;">
+                                        {% for error in field.errors %}
+                                            <span style="color: red;">{{ error }}</span><br>  <!-- Muestra el error en rojo -->
+                                        {% endfor %}
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
         <!-- FUNCIONES JAVASCRIPT -->
-<h3 style="display: none;"></h3> 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 const tipperField = document.getElementById("id_tipper");
@@ -314,6 +333,29 @@
             function selectText(element) {
                 element.select();
             }
+
+            // Alerta de errores
+            document.addEventListener('DOMContentLoaded', function () {
+                const modal = document.getElementById('alertModal');
+                const closeButton = document.querySelector('.close-button');
+        
+                // Mostrar el modal si hay errores
+                {% if errors %}
+                    modal.style.display = 'block';  
+                {% endif %}
+        
+                // Cerrar el modal
+                closeButton.addEventListener('click', function () {
+                    modal.style.display = 'none';
+                });
+        
+                // Cerrar el modal al hacer clic fuera
+                window.addEventListener('click', function (event) {
+                    if (event.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            }); 
         </script>
         
     </form>

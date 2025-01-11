@@ -7,13 +7,17 @@ def validate_phone(value):
     if not value.isdigit() or not (9 <= len(value) <= 15):
         raise ValidationError("El número de teléfono debe contener entre 9 y 15 dígitos y solo puede incluir números.")
   
-    
-def validar_nit(nit):
+
+def validar_nit(nit, tipper):
+    if tipper != 1:
+        return
+
     if not nit:
         raise ValidationError("El NIT no puede estar vacío.")
     
-    
+    # Eliminar espacios y caracteres innecesarios
     nit = nit.replace(" ", "").strip()
+    
     if "-" in nit:
         partes = nit.split("-")
         if len(partes) != 2:
@@ -23,17 +27,28 @@ def validar_nit(nit):
         if not numero.isdigit() or not digito_verificacion.isdigit():
             raise ValidationError("El NIT debe contener solo números antes y después del guion.")
     else:
-        numero = nit
-        digito_verificacion = numero[-1]
-        numero = numero[:-1]
+        if len(nit) < 2:  # Asegurarnos de que el NIT tenga al menos dos caracteres
+            raise ValidationError("El NIT debe incluir el número principal y el dígito de verificación.")
+        
+        numero = nit[:-1]
+        digito_verificacion = nit[-1]
     
+    # Verificar que el número principal y el dígito de verificación sean numéricos
     if not numero.isdigit():
         raise ValidationError("El NIT debe contener solo números en su parte principal.")
+    if not digito_verificacion.isdigit():
+        raise ValidationError("El dígito de verificación del NIT debe ser un número.")
     
-    if len(numero) < 4 or len(numero) > 15:
-        raise ValidationError("El número del NIT debe tener entre 4 y 15 dígitos.")
+
+    if len(numero) < 8 or len(numero) > 14:
+        raise ValidationError("El número principal del NIT debe tener entre 8 y 14 dígitos.")
     
+    if len(nit) < 9 or len(nit) > 15:
+        raise ValidationError("El NIT completo (número y dígito de verificación) debe tener entre 9 y 15 dígitos.")
+    
+    print(f"NIT validado correctamente: {nit}")  # Debug
     return nit
+
 
 
 
@@ -104,7 +119,6 @@ class Tercero(models.Model):
         max_length=20,
         unique=True,
         verbose_name="NIT/Cédula",
-        validators=[validar_nit],
         help_text="(Ingrese el NIT o la cédula sin puntos ni guiones)."
     )
 
@@ -181,6 +195,7 @@ class Tercero(models.Model):
     lista_base = models.SmallIntegerField(null=True, blank=True, verbose_name="Lista base")
     observa = models.TextField(null=True, blank=True, verbose_name="Observaciones")
     ter_origen = models.SmallIntegerField(null=True, blank=True, verbose_name="Origen del cliente", choices=TER_ORIGEN_CHOICES)
+    des_origen = models.CharField(max_length=50, null=True, blank=True, verbose_name="Descripción del origen")
     localidad = models.CharField(max_length=50, null=True, blank=True, verbose_name="Localidad")
     barrio = models.CharField(max_length=50, null=True, blank=True, verbose_name="Barrio")
 
@@ -194,13 +209,29 @@ class Tercero(models.Model):
     lisvar = models.SmallIntegerField(null=True, blank=True, verbose_name="Lista variable")
     codalter = models.IntegerField(null=True, blank=True, verbose_name="Código alternativo")
     
-    des_origen = models.CharField(max_length=50, null=True, blank=True, verbose_name="Descripción del origen") """
+     """
     
 
 
     # Métodos útiles
     def __str__(self):
         return f"{self.get_tipnit_display()} - {self.nomter or self.nomcter}"
+    
+    def clean(self):
+        super().clean()
+        if self.tipper == 1:
+            if not self.nitter:
+                raise ValidationError({
+                    "nitter": "El NIT no puede estar vacío para personas jurídicas."
+                    })
+            validar_nit(self.nitter, self.tipper)
+        
+        # Validación del campo des_origen
+        if self.ter_origen is not None and self.des_origen in (None, ''):
+            raise ValidationError({
+                "des_origen": "Si selecciona un origen del cliente, debe proporcionar una descripción del origen."
+            })
+
 
     def get_tipo_persona_display(self):
         return self.get_tipper_display()

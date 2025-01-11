@@ -1,8 +1,11 @@
 from django import forms
-from .models import Tercero
+from .models import Tercero, validar_nit
+
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import AuthenticationForm  
+from django.contrib.auth import authenticate
+
 
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -12,18 +15,39 @@ class UserRegistrationForm(forms.ModelForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
 
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get("password")
-        confirm_password = cleaned_data.get("confirm_password")
 
-        if password != confirm_password:
-            raise ValidationError("Las contraseñas no coinciden.")
-        return cleaned_data
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
+
 
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(max_length=254, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Usuario'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña'}))
+    username = forms.CharField(
+        max_length=254, 
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Usuario'})
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña'})
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        password = cleaned_data.get('password')
+
+        if username and password:
+            print(f"Intentando autenticar al usuario: {username}")  # Debug
+            user = authenticate(username=username, password=password)
+            if not user:
+                raise forms.ValidationError("Credenciales inválidas.")
+            if not user.is_active:
+                raise forms.ValidationError("El usuario está inactivo.")
+        return cleaned_data
+
+
 
 class TerceroForm(forms.ModelForm):
     class Meta:
@@ -40,6 +64,7 @@ class TerceroForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
 
         self.fields['tipper'].widget = forms.Select(choices=Tercero.TIPPER_CHOICES)
         self.fields['tipnit'].widget = forms.Select(choices=Tercero.TIPNIT_CHOICES)
@@ -83,31 +108,27 @@ class TerceroForm(forms.ModelForm):
         else:
             self.fields['tipnit'].choices = []
 
+    def clean_nitter(self):
+        nitter = self.cleaned_data.get("nitter")
+        tipper = self.cleaned_data.get("tipper")
+        if tipper == 1: 
+            validar_nit(nitter, tipper)
+        return nitter
+
+
 
     def clean(self):
         cleaned_data = super().clean()
         tipper = cleaned_data.get("tipper")
-        tipnit = cleaned_data.get("tipnit")
-        nitter = cleaned_data.get("nitter")
+        nomter = cleaned_data.get("nomter")
+        sapter = cleaned_data.get("sapter")
+        papter = cleaned_data.get("papter")
 
-        # Validación para Persona Natural
-        if tipper == "0":  # Persona Natural
-            if tipnit not in [0, 2, 3, 4]:
-                raise forms.ValidationError("Una persona NATURAL solo puede usar cédula, tarjeta de identidad o registro civil")
-
-        # Validación para Persona Jurídica
-        elif tipper == "1":  # Persona Jurídica
-            if tipnit != 1:
-                raise forms.ValidationError("Una persona JURÍDICA solo puede usar el documento de tipo NIT")
-
-            # Validar que el NIT contenga solo números
-            if not nitter or not nitter.strip().isdigit():
-                raise forms.ValidationError("El NIT debe contener únicamente números para personas jurídicas")
-            
-            # Validar la longitud del NIT
-            if not (5 <= len(nitter.strip()) <= 15):
-                raise forms.ValidationError("El NIT o Documento debe contener entre 5 y 15 caracteres")
-
+        if tipper == 1:  # Persona Jurídica
+            if nomter or sapter:
+                self.add_error("nomter", "Las personas jurídicas no pueden registrar un Nombre o Segundo Apellido.")
+            if not papter:
+                self.add_error("nomter", "Las personas jurídicas deben registrar un nombre en el campo 'Empresa'.")
         return cleaned_data
 
 
@@ -127,13 +148,13 @@ class TerceroForm(forms.ModelForm):
     
     def clean_excento_iva(self):
         excen_iva = self.cleaned_data.get('excen_iva')
-        if excen_iva is None:  # Si el campo no tiene valor, lo dejamos como None (vacío)
+        if excen_iva is None:
             return None
         return excen_iva
 
     def clean_regimen_simplificado(self):
         regimen_sim = self.cleaned_data.get('regimen_sim')
-        if regimen_sim is None:  # Si el campo no tiene valor, lo dejamos como None (vacío)
+        if regimen_sim is None:
             return None
         return regimen_sim
 

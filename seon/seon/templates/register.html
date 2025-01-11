@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Usuario</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="website icon" type="icon" href="{% static 'images/admin.png' %}">
 </head>
 <body>
     <div class="login-container">
@@ -13,10 +14,39 @@
             <h1>Registro de Usuario</h1>
             <form method="post">
                 {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary">Registrar Usuario</button>
+                <!-- Primera fila -->
+                <p>
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username">
+                </p>
+                <p>
+                    <label for="first_name">First Name</label>
+                    <input type="text" name="first_name" id="first_name">
+                </p>
+                <p>
+                    <label for="last_name">Last Name</label>
+                    <input type="text" name="last_name" id="last_name">
+                </p>
+
+                <!-- Segunda fila -->
+                <p>
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email">
+                </p>
+                <p>
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password">
+                </p>
+                <p>
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" name="confirm_password" id="confirm_password">
+                </p>
+
+                <!-- Botón -->
+                <button type="submit">Registrar Usuario</button>
             </form>
         </div>
     </div>
 </body>
 </html>
+
